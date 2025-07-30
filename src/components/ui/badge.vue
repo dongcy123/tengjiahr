@@ -1,7 +1,13 @@
-import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
+<template>
+  <div :class="badgeClasses" v-bind="$attrs">
+    <slot />
+  </div>
+</template>
 
-import { cn } from "@/lib/utils"
+<script setup lang="ts">
+import { computed } from 'vue'
+import { cva, type VariantProps } from 'class-variance-authority'
+import { cn } from '@/lib/utils'
 
 const badgeVariants = cva(
   "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
@@ -23,14 +29,19 @@ const badgeVariants = cva(
   }
 )
 
-export interface BadgeProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeVariants> {}
-
-function Badge({ className, variant, ...props }: BadgeProps) {
-  return (
-    <div className={cn(badgeVariants({ variant }), className)} {...props} />
-  )
+interface BadgeProps extends VariantProps<typeof badgeVariants> {
+  class?: string
 }
 
-export { Badge, badgeVariants }
+const props = withDefaults(defineProps<BadgeProps>(), {
+  variant: 'default'
+})
+
+const badgeClasses = computed(() => {
+  return cn(badgeVariants({ variant: props.variant }), props.class)
+})
+
+defineExpose({
+  badgeVariants
+})
+</script> 
