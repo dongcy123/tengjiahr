@@ -1,16 +1,20 @@
-import path from "path"
 import { defineConfig } from "vite"
-import react from "@vitejs/plugin-react"
+import vue from "@vitejs/plugin-vue"
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [vue()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@": "/src",
     },
   },
   server: {
     host: "0.0.0.0",
     allowedHosts: true
+  },
+  build: {
+    outDir: "dist",
+    assetsDir: "assets",
+    sourcemap: false
   }
 })
